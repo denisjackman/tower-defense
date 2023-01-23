@@ -4,6 +4,7 @@
 **/secrets/*
 **/.pytest_cache/*
 **/.vscode/*
+**/*.egg-info/*
 
 # Compiled source #
 ###################
