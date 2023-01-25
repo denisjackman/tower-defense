@@ -5,6 +5,8 @@
 **/.pytest_cache/*
 **/.vscode/*
 **/*.egg-info/*
+**/tim-tower/game_assets/*
+**/tower/assets/gfx/knl/*
 
 # Compiled source #
 ###################
