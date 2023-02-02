@@ -1,9 +1,10 @@
 '''This is the main game file.'''
 import os
 import pygame
-from  enemies.scorpion import Scorpion
-from  enemies.club import Club
-from  enemies.wizard import Wizard
+from enemies.scorpion import Scorpion
+from enemies.club import Club
+from enemies.wizard import Wizard
+from tower.archerTower import ArcherTowerLong
 
 CAPTION = "Tim-Tower"
 ICON_FILE = 'y:/Resources/jackmanimation.png'
@@ -15,11 +16,17 @@ class Game:
         self.width = 1350
         self.height = 700
         self.win = pygame.display.set_mode((self.width, self.height))
-        #self.enemies = [Scorpion(), Club(), Wizard()]
-        #self.enemies = [Scorpion()]
-        self.enemies = [Club()]
-        #self.enemies = [Wizard()]
-        self.towers = []
+        self.enemies = [Wizard()]
+
+        self.towers = [ArcherTowerLong(811, 159), 
+                       ArcherTowerLong(539, 184),
+                       ArcherTowerLong(1085, 176),
+                       ArcherTowerLong(1044, 381),
+                       ArcherTowerLong(696, 381),
+                       ArcherTowerLong(231, 458),
+                       ArcherTowerLong(493, 630),
+                       ArcherTowerLong(900, 584),
+                       ArcherTowerLong(119, 130)]
         self.lives = 10
         self.money = 100
         self.background = pygame.image.load(BACKGROUND)
@@ -31,31 +38,52 @@ class Game:
         clock = pygame.time.Clock()
         pygame_icon = pygame.image.load(ICON_FILE)
         pygame.display.set_icon(pygame_icon)
+        enemycheck = 0 
         while run:
-            pygame.display.set_caption(f"{CAPTION} x:{int(self.enemies[0].x)} y:{int(self.enemies[0].y)}")
-            #pygame.time.delay(250)
             clock.tick(100)
+ 
+            if len(self.enemies) == 0:
+                pygame.display.set_caption(f"{CAPTION}")
+                if enemycheck == 0:
+                    self.enemies.append(Wizard())
+                    enemycheck = 1
+                elif enemycheck == 1:
+                    self.enemies.append(Club())
+                    enemycheck = 2
+                elif enemycheck == 2:
+                    self.enemies.append(Scorpion())
+                    enemycheck = 0
+            else:    
+                pygame.display.set_caption(f"{CAPTION} x:{int(self.enemies[0].x)} y:{int(self.enemies[0].y)}")
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     pass
+
             enemies_delete = []
             for enemy in self.enemies:
-                pass
                 if enemy.x < -15:
                     enemies_delete.append(enemy)
+
             for enemy in enemies_delete:
                 self.enemies.remove(enemy)
+            for tower in self.towers:
+                tower.attack(self.enemies)
             self.draw()
+
         pygame.quit()
 
     def draw(self):
         '''This function draws the game.'''
         self.win.blit(self.background, (0, 0))
+
         for enemy in self.enemies:
             enemy.draw(self.win)
 
+        for tower in self.towers:
+            tower.draw(self.win)
         pygame.display.update()
 
 g = Game()
