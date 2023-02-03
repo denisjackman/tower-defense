@@ -9,7 +9,27 @@ class Enemy:
         self.animation_count = 0
         self.health = 1
         self.velocity = 3
-        self.path = [(-10, 224),(19, 224), (177, 235), (282, 283), (526, 277), (607, 217), (641, 105), (717, 57), (796, 83), (855, 222), (973, 284), (1046, 366), (1022, 458), (894, 492), (740, 504), (580, 542), (148, 541), (10, 442), (-10, 335), (-100, 345)]
+        self.path = [(-10, 224),  # 0
+                     (19, 224),   # 1 
+                     (177, 235),  # 2 
+                     (282, 283),  # 3 
+                     (526, 277),  # 4 
+                     (607, 217),  # 5 
+                     (641, 105),  # 6 
+                     (717, 57),   # 7 
+                     (796, 83),   # 8
+                     (855, 222),  # 9
+                     (940, 252),  #10
+                     (973, 284),  #11
+                     (1090, 366), #12 
+                     (1100, 448), #13 
+                     (894, 448),  #14
+                     (740, 484),  #15
+                     (580, 525),  #16
+                     (148, 535),  #17
+                     (10, 486),   #18
+                     (3, 335),    #19
+                     (-100, 335)] #20
         self.x = self.path[0][0]
         self.y = self.path[0][1]
         self.distance = 0 
@@ -20,6 +40,7 @@ class Enemy:
         self.images = []
         self.flipped = False 
         self.speed_increase = 1.2
+        self.max_health = 0
 
     def draw(self, win):
         '''This function draws the enemy.'''
@@ -28,7 +49,12 @@ class Enemy:
             self.animation_count = 0
 
         self.image = self.images[self.animation_count // 3]
-        win.blit(self.image, (self.x - (self.image.get_width()/2), self.y -(self.image.get_height()/2)))
+        dx = self.x - (self.image.get_width() / 2)
+        dy = self.y - (self.image.get_height() / 2)
+        win.blit(self.image, (dx, dy))
+        self.draw_health_bar(win)
+        #for path in self.path:
+        #    pygame.draw.circle(win, (255, 0, 0), (path[0], path[1]), 5,1 )
         self.move()
         
     def collide(self, collide_x, collide_y):
@@ -134,3 +160,13 @@ class Enemy:
         if self.health <= 0:
             return True
         return False
+    
+    def draw_health_bar(self, win):
+        '''This function draws the health bar.'''
+        length = 50 
+        move_by = round(length / self.max_health)
+        health_bar = move_by * self.health
+        hbx = self.x - (self.image.get_width()/2)
+        hby = self.y -(self.image.get_height()/2) - 5
+        pygame.draw.rect(win, (255, 0, 0), (hbx, hby, length, 10), 0)
+        pygame.draw.rect(win, (0, 255, 0), (hbx, hby, health_bar, 10), 0)

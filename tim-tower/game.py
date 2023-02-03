@@ -1,5 +1,7 @@
 '''This is the main game file.'''
 import os
+import time
+import random
 import pygame
 from enemies.scorpion import Scorpion
 from enemies.club import Club
@@ -29,6 +31,7 @@ class Game:
                        ArcherTowerLong(119, 130)]
         self.lives = 10
         self.money = 100
+        self.timer = time.time()
         self.background = pygame.image.load(BACKGROUND)
         self.background = pygame.transform.scale(self.background, (self.width, self.height))
     
@@ -41,7 +44,9 @@ class Game:
         enemycheck = 0 
         while run:
             clock.tick(100)
- 
+            if time.time() - self.timer >= random.randrange(1, 5)/2:
+                self.timer = time.time()
+                self.enemies.append(random.choice([Wizard(), Club(), Scorpion()]))
             if len(self.enemies) == 0:
                 pygame.display.set_caption(f"{CAPTION}")
                 if enemycheck == 0:
@@ -54,7 +59,7 @@ class Game:
                     self.enemies.append(Scorpion())
                     enemycheck = 0
             else:    
-                pygame.display.set_caption(f"{CAPTION} x:{int(self.enemies[0].x)} y:{int(self.enemies[0].y)}")
+                pygame.display.set_caption(f"{CAPTION} path:{int(self.enemies[0].path_pos)} ")
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -79,11 +84,12 @@ class Game:
         '''This function draws the game.'''
         self.win.blit(self.background, (0, 0))
 
-        for enemy in self.enemies:
-            enemy.draw(self.win)
-
         for tower in self.towers:
             tower.draw(self.win)
+
+        for enemy in self.enemies:
+            enemy.draw(self.win)           
+
         pygame.display.update()
 
 g = Game()

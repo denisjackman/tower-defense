@@ -14,6 +14,7 @@ class Tower():
         self.selected = False
         self.menu = None
         self.tower_images = []
+        self.damage = 1
     
     def draw(self, win):
         '''This function draws the tower.'''
@@ -34,6 +35,7 @@ class Tower():
     def upgrade(self):
         '''This function upgrades the tower.'''
         self.level += 1
+        self.damage += 1
     
     def get_upgrade_cost(self):
         '''This function gets the upgrade cost of the tower.'''
