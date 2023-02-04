@@ -6,7 +6,8 @@ import pygame
 from enemies.scorpion import Scorpion
 from enemies.club import Club
 from enemies.wizard import Wizard
-from tower.archerTower import ArcherTowerLong
+from tower.archerTower import ArcherTowerLong, ArcherTowerShort
+pygame.font.init()
 
 CAPTION = "Tim-Tower"
 ICON_FILE = 'y:/Resources/jackmanimation.png'
@@ -21,19 +22,20 @@ class Game:
         self.enemies = [Wizard()]
 
         self.towers = [ArcherTowerLong(811, 159), 
-                       ArcherTowerLong(539, 184),
+                       ArcherTowerShort(539, 184),
                        ArcherTowerLong(1085, 176),
-                       ArcherTowerLong(1044, 381),
+                       ArcherTowerShort(1044, 381),
                        ArcherTowerLong(696, 381),
-                       ArcherTowerLong(231, 458),
+                       ArcherTowerShort(231, 458),
                        ArcherTowerLong(493, 630),
-                       ArcherTowerLong(900, 584),
+                       ArcherTowerShort(900, 584),
                        ArcherTowerLong(119, 130)]
         self.lives = 10
         self.money = 100
         self.timer = time.time()
         self.background = pygame.image.load(BACKGROUND)
         self.background = pygame.transform.scale(self.background, (self.width, self.height))
+        self.life_font = pygame.font.SysFont("comicsans", 70)
     
     def run(self):
         '''This is the main game loop.'''
@@ -73,9 +75,14 @@ class Game:
                     enemies_delete.append(enemy)
 
             for enemy in enemies_delete:
+                self.lives -= 1
                 self.enemies.remove(enemy)
             for tower in self.towers:
                 tower.attack(self.enemies)
+                
+            if self.lives <= 0:
+                print("Game Over - you lose")
+                run = False
             self.draw()
 
         pygame.quit()
@@ -88,9 +95,23 @@ class Game:
             tower.draw(self.win)
 
         for enemy in self.enemies:
-            enemy.draw(self.win)           
+            enemy.draw(self.win)
+        
+        text = self.life_font.render(f"{self.lives}", 1, (255, 255, 255))
+        life = LIVES_IMAGE
+        text = pygame.transform.scale(text, (50, 50))
+        start_x = self.width - life.get_width()
+        self.win.blit(text, (start_x - text.get_width() - 10 , 10))
+        self.win.blit(LIVES_IMAGE, (start_x, 10))
 
         pygame.display.update()
 
+    def draw_menu(self):
+        '''This function draws the menu.'''
+        pass
+
 g = Game()
+LIVES_IMAGE = pygame.image.load(os.path.join("game_assets/","heart.png")).convert_alpha()
+LIVES_IMAGE = pygame.transform.scale(LIVES_IMAGE, (50, 50))
+STAR_IMAGE = pygame.image.load(os.path.join("game_assets/","star.png")).convert_alpha()
 g.run()
