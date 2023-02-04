@@ -5,34 +5,35 @@ import os
 import math
 import time
 
+atltower_images = []
+atlarcher_images = []
+
+for atx in range(3):
+    add_str = str(atx + 6)
+    asset = f"{os.path.join('game_assets/archer-tower-game-assets/PNG')}/{add_str}.png"
+    asset_store = pygame.image.load(asset)
+    asset_store = pygame.transform.scale(asset_store, (64, 64))            
+    atltower_images.append(asset_store)
+
+for aax in range(6):
+    add_str = str(aax + 38)
+    asset = f"{os.path.join('game_assets/archer-tower-game-assets/PNG')}/{add_str}.png"
+    asset_store = pygame.image.load(asset)
+    asset_store = pygame.transform.scale(asset_store, (32, 32))            
+    atlarcher_images.append(asset_store)
+
 class ArcherTowerLong(Tower):
     ''' this is the archer tower class '''
     def __init__(self, x, y):
         super().__init__(x, y)
-
-        self.tower_images = []
-        self.archer_images = []
+        self.tower_images = atltower_images[:]
+        self.archer_images = atlarcher_images[:]
         self.archer_count = 0
         self.range = 150
         self.inRange = False
         self.left = True
-        self.timer = time.time()
         self.damage = 1
-
-        for atx in range(4):
-            add_str = str(atx + 7)
-            asset = f"{os.path.join('game_assets/archer-tower-game-assets/PNG')}/{add_str}.png"
-            asset_store = pygame.image.load(asset)
-            asset_store = pygame.transform.scale(asset_store, (self.width, self.height))            
-            self.tower_images.append(asset_store)
-
-        for aax in range(6):
-            add_str = str(aax + 38)
-            asset = f"{os.path.join('game_assets/archer-tower-game-assets/PNG')}/{add_str}.png"
-            asset_store = pygame.image.load(asset)
-            asset_store = pygame.transform.scale(asset_store, (32, 32))            
-            self.archer_images.append(asset_store)
-    
+        
     def draw(self, win):
         '''This function draws the tower.'''
         circle_surface = pygame.Surface((self.range*4, self.range*4), pygame.SRCALPHA,32)
@@ -51,8 +52,6 @@ class ArcherTowerLong(Tower):
         archerx = (self.x + self.width/2) - (archer.get_width()/2) - 32
         archery = (self.y) - (archer.get_height()/2) - 35
         win.blit(archer, (archerx, archery))
-
-
     
     def attack(self, enemies):
         '''This function attacks the enemies.'''
@@ -68,9 +67,8 @@ class ArcherTowerLong(Tower):
         enemy_closest.sort(key=lambda x: x.path_pos, reverse=False)
         if len(enemy_closest) > 0:
             first_enemy = enemy_closest[0]
-            if time.time() - self.timer >= 0.5:
-               self.timer = time.time()
-               if first_enemy.hit():
+            if self.archer_count == 6:
+               if first_enemy.hit(self.damage):
                    enemies.remove(first_enemy)
             if first_enemy.x > self.x and not self.left:
                 self.left = True
@@ -84,4 +82,32 @@ class ArcherTowerLong(Tower):
     def change_range(self, range):
         '''This function gets the range.'''
         self.range = range
-    
+
+atstower_images = []
+atsarcher_images = []
+
+for atx in range(3):
+    add_str = str(atx + 10)
+    asset = f"{os.path.join('game_assets/archer-tower-game-assets/PNG')}/{add_str}.png"
+    asset_store = pygame.image.load(asset)
+    asset_store = pygame.transform.scale(asset_store, (64, 64))            
+    atstower_images.append(asset_store)
+
+for aax in range(6):
+    add_str = str(aax + 64)
+    asset = f"{os.path.join('game_assets/archer-tower-game-assets/PNG')}/{add_str}.png"
+    asset_store = pygame.image.load(asset)
+    asset_store = pygame.transform.scale(asset_store, (32, 32))            
+    atsarcher_images.append(asset_store)    
+class ArcherTowerShort(ArcherTowerLong):
+    def __init__(self, x, y):
+        super().__init__(x, y)
+
+        self.archer_count = 0
+        self.range = 100
+        self.inRange = False
+        self.left = True
+        self.damage = 2
+        self.tower_images = atstower_images[:]
+        self.archer_images = atsarcher_images[:]
+

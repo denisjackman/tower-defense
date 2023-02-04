@@ -18,4 +18,3 @@ class Wizard(Enemy):
         self.max_health = 3
         self.health = self.max_health
         self.images = images[:]
-

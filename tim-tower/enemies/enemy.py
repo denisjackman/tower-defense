@@ -154,9 +154,9 @@ class Enemy:
                 if self.x <= x2 and self.y >= y2:
                     self.path_pos += 1
 
-    def hit(self):
+    def hit(self, damage):
         '''This function checks if the enemy has been hit.'''
-        self.health -= 1
+        self.health -= damage
         if self.health <= 0:
             return True
         return False

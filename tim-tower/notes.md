@@ -8,6 +8,8 @@
 ## Notes
 * the background png is 1350 by 700 made up of tiles from the asset library 
 * and it looks like this ![Background](../resources/Picture1.png)
+## Todo 
+* fix the heart image to have a proper transparent background
 
 ## Enemies 
 * self.enemies = [Scorpion(), Club(), Wizard()]
