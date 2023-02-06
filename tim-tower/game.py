@@ -108,6 +108,7 @@ class Game:
 
     def draw_menu(self):
         '''This function draws the menu.'''
+
         pass
 
 g = Game()
