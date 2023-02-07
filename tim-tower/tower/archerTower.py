@@ -1,9 +1,8 @@
 ''' this is the archer tower class '''
-from .tower import Tower
-import pygame
 import os
 import math
-import time
+import pygame
+from .tower import Tower
 
 atltower_images = []
 atlarcher_images = []

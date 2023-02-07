@@ -21,6 +21,12 @@ class Tower():
         image = self.tower_images[self.level-1]
         win.blit(image, (self.x - image.get_width()//2, self.y - image.get_height()//2))
     
+    def draw_radious(self, window):
+        '''This function draws the range of the tower.'''
+        circle_surface = pygame.Surface((self.radius*4, self.radius*4), pygame.SRCALPHA,32)
+        pygame.draw.circle(circle_surface, (128, 128, 128, 100), (self.radius, self.radius), self.radius)
+        window.blit(circle_surface, (self.x - self.radius, self.y - self.radius))        
+    
     def click(self, x ,y):
         '''This function checks if the tower has been clicked.'''
         if x <= self.x + self.width and self.x >= x:

@@ -7,6 +7,7 @@ from enemies.scorpion import Scorpion
 from enemies.club import Club
 from enemies.wizard import Wizard
 from tower.archerTower import ArcherTowerLong, ArcherTowerShort
+from tower.supportTower import RangeTower, DamageTower
 pygame.font.init()
 
 CAPTION = "Tim-Tower"
@@ -21,15 +22,14 @@ class Game:
         self.win = pygame.display.set_mode((self.width, self.height))
         self.enemies = [Wizard()]
 
-        self.towers = [ArcherTowerLong(811, 159), 
-                       ArcherTowerShort(539, 184),
-                       ArcherTowerLong(1085, 176),
+        self.attack_towers = [ArcherTowerLong(811, 159), 
                        ArcherTowerShort(1044, 381),
                        ArcherTowerLong(696, 381),
                        ArcherTowerShort(231, 458),
                        ArcherTowerLong(493, 630),
                        ArcherTowerShort(900, 584),
                        ArcherTowerLong(119, 130)]
+        self.support_towers = [RangeTower(539, 184), DamageTower(1085, 176)]
         self.lives = 10
         self.money = 100
         self.timer = time.time()
@@ -77,8 +77,11 @@ class Game:
             for enemy in enemies_delete:
                 self.lives -= 1
                 self.enemies.remove(enemy)
-            for tower in self.towers:
-                tower.attack(self.enemies)
+            for attack_tower in self.attack_towers:
+                attack_tower.attack(self.enemies)
+
+            for support_tower in self.support_towers:
+                support_tower.support(self.attack_towers)
                 
             if self.lives <= 0:
                 print("Game Over - you lose")
@@ -91,8 +94,11 @@ class Game:
         '''This function draws the game.'''
         self.win.blit(self.background, (0, 0))
 
-        for tower in self.towers:
-            tower.draw(self.win)
+        for attack_tower in self.attack_towers:
+            attack_tower.draw(self.win)
+
+        for support_tower in self.support_towers:
+            support_tower.draw(self.win)
 
         for enemy in self.enemies:
             enemy.draw(self.win)
