@@ -22,20 +22,24 @@ class Game:
         self.win = pygame.display.set_mode((self.width, self.height))
         self.enemies = [Wizard()]
 
-        self.attack_towers = [ArcherTowerLong(811, 159), 
-                       ArcherTowerShort(1044, 381),
-                       ArcherTowerLong(696, 381),
-                       ArcherTowerShort(231, 458),
-                       ArcherTowerLong(493, 630),
-                       ArcherTowerShort(900, 584),
-                       ArcherTowerLong(119, 130)]
-        self.support_towers = [RangeTower(539, 184), DamageTower(1085, 176)]
+        self.attack_towers = [ArcherTowerLong(119, 130),
+                              ArcherTowerShort(231, 458),
+                              ArcherTowerLong(493, 630),
+                              ArcherTowerLong(696, 381),
+                              ArcherTowerLong(811, 159),
+                              ArcherTowerShort(900, 584),
+                              ArcherTowerShort(1044, 381),
+                            ]                              
+        self.support_towers = [DamageTower(539, 184), 
+                               RangeTower(1085, 176)
+                               ]
         self.lives = 10
         self.money = 100
         self.timer = time.time()
         self.background = pygame.image.load(BACKGROUND)
         self.background = pygame.transform.scale(self.background, (self.width, self.height))
         self.life_font = pygame.font.SysFont("comicsans", 70)
+        self.selected_tower = None
     
     def run(self):
         '''This is the main game loop.'''
@@ -50,7 +54,6 @@ class Game:
                 self.timer = time.time()
                 self.enemies.append(random.choice([Wizard(), Club(), Scorpion()]))
             if len(self.enemies) == 0:
-                pygame.display.set_caption(f"{CAPTION}")
                 if enemycheck == 0:
                     self.enemies.append(Wizard())
                     enemycheck = 1
@@ -60,14 +63,26 @@ class Game:
                 elif enemycheck == 2:
                     self.enemies.append(Scorpion())
                     enemycheck = 0
-            else:    
-                pygame.display.set_caption(f"{CAPTION} path:{int(self.enemies[0].path_pos)} ")
 
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    pass
+                    position = pygame.mouse.get_pos()
+
+                    for tower in self.attack_towers:
+                        if tower.click(position[0], position[1]):
+                            tower.selected = True
+                            self.selected_tower = tower
+                        else:
+                            tower.selected = False
+
+                    for tower in self.support_towers:
+                        if tower.click(position[0], position[1]):
+                            tower.selected = True
+                            self.selected_tower = tower
+                        else:
+                            tower.selected = False
 
             enemies_delete = []
             for enemy in self.enemies:
@@ -118,7 +133,7 @@ class Game:
         pass
 
 g = Game()
-LIVES_IMAGE = pygame.image.load(os.path.join("game_assets/","heart.png")).convert_alpha()
+LIVES_IMAGE = pygame.image.load("game_assets/td-gui/PNG/interface_game/heart.png").convert_alpha()
 LIVES_IMAGE = pygame.transform.scale(LIVES_IMAGE, (50, 50))
-STAR_IMAGE = pygame.image.load(os.path.join("game_assets/","star.png")).convert_alpha()
+STAR_IMAGE = pygame.image.load("game_assets/td-gui/PNG/interface_game/star.png").convert_alpha()
 g.run()

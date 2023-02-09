@@ -25,3 +25,11 @@
 * self.path = [(460, 401), (460, 401), (460, 401), (460, 401), (460, 401), (460, 401), (460, 401), (460, 401), (460, 401)]
 * self.path = [(698, 417), (122, 419), (117, 286), (682, 287), (698, 417)]
 * self.path = [(-10, 224),(19, 224), (177, 235), (282, 283), (526, 277), (607, 217), (641, 105), (717, 57), (796, 83), (855, 222), (973, 284), (1046, 366), (1022, 458), (894, 492), (740, 504), (580, 542), (148, 541), (10, 442), (-10, 335), (-100, 345)]
+
+game_assets\td-gui\PNG\menu\button_settings.png
+game_assets\td-gui\PNG\settings\button_close.png
+game_assets\td-gui\PNG\upgrade\button_done.png
+game_assets\td-gui\PNG\upgrade\window_3.png
+game_assets\td-gui\PNG\menu\button_play.png
+game_assets\td-gui\PNG\achievement\normal_window.png
+game_assets\td-gui\PNG\achievement\star.png

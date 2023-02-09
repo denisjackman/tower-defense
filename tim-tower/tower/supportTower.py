@@ -25,9 +25,11 @@ class RangeTower(Tower):
     ''' this is the range tower class'''
     def __init__(self, x, y):
         super().__init__(x, y)
-        self.radius = 150
+        self.radius = 300
         self.tower_images = range_images[:]
         self.effect = [0.2, 0.4]
+        self.width = 64 
+        self.height = 64
         
     def draw(self, window):
         ''' this draws the range tower '''
@@ -36,16 +38,36 @@ class RangeTower(Tower):
     
     def support(self, towers):
         ''' this function supports the tower '''
-        pass
+        affected = []
+        for tower in towers:
+            tower_x = tower.x
+            tower_y = tower.y
+            distance = math.sqrt((tower_x - self.x)**2 + (tower_y - self.y)**2)
+            if distance < self.radius + tower.width/2:
+                self.inRange = True
+                affected.append(tower) 
+        for tower in affected:
+            tower.range = tower.original_damage + round(tower.range * self.effect[self.level - 1])
         
 class DamageTower(RangeTower):
     ''' this is the damage tower class '''
     def __init__(self, x, y):
         super().__init__(x, y)
-        self.radius = 150
+        self.radius = 300
         self.tower_images = damage_images[:]
         self.effect = [1, 2]
+        self.width = 64
+        self.height = 64
 
     def support(self, towers):
         ''' this function supports the tower '''
-        pass    
+        affected = []
+        for tower in towers:
+            tower_x = tower.x
+            tower_y = tower.y
+            distance = math.sqrt((tower_x - self.x)**2 + (tower_y - self.y)**2)
+            if distance < self.radius + tower.width/2:
+                self.inRange = True
+                affected.append(tower) 
+        for tower in affected:
+            tower.damage = tower.original_damage + round(tower.original_damage * self.effect[self.level - 1])

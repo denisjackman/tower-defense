@@ -29,16 +29,20 @@ class ArcherTowerLong(Tower):
         self.archer_images = atlarcher_images[:]
         self.archer_count = 0
         self.range = 150
+        self.original_range = self.range
         self.inRange = False
         self.left = True
         self.damage = 1
+        self.original_damage = self.damage
+        self.width = 64 
+        self.height == 64
         
     def draw(self, win):
         '''This function draws the tower.'''
-        circle_surface = pygame.Surface((self.range*4, self.range*4), pygame.SRCALPHA,32)
-        pygame.draw.circle(circle_surface, (128, 128, 128, 100), (self.range, self.range), self.range)
-        win.blit(circle_surface, (self.x - self.range, self.y - self.range))
-        
+        if self.selected:
+            circle_surface = pygame.Surface((self.range*4, self.range*4), pygame.SRCALPHA,32)
+            pygame.draw.circle(circle_surface, (128, 128, 128, 100), (self.range, self.range), self.range)
+            win.blit(circle_surface, (self.x - self.range, self.y - self.range))
         super().draw(win)
         if self.inRange:
             self.archer_count += 1

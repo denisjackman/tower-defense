@@ -23,15 +23,34 @@ class Tower():
     
     def draw_radious(self, window):
         '''This function draws the range of the tower.'''
-        circle_surface = pygame.Surface((self.radius*4, self.radius*4), pygame.SRCALPHA,32)
-        pygame.draw.circle(circle_surface, (128, 128, 128, 100), (self.radius, self.radius), self.radius)
-        window.blit(circle_surface, (self.x - self.radius, self.y - self.radius))        
+        if self.selected:
+            circle_surface = pygame.Surface((self.radius*4, self.radius*4), pygame.SRCALPHA,32)
+            pygame.draw.circle(circle_surface, (128, 128, 128, 100), (self.radius, self.radius), self.radius)
+            window.blit(circle_surface, (self.x - self.radius, self.y - self.radius))        
     
-    def click(self, x ,y):
+    def old_click(self, x ,y):
         '''This function checks if the tower has been clicked.'''
         if x <= self.x + self.width and self.x >= x:
             if y <= self.y + self.height and self.y >= y:
                 return True
+        return False
+
+    def click(self, X, Y):
+        """
+        returns if tower has been clicked on
+        and selects tower if it was clicked
+        :param X: int
+        :param Y: int
+        :return: bool
+        """
+        img = self.tower_images[self.level - 1]
+        dx =  self.x - img.get_width()//2 + self.width
+        dx1 = self.x - img.get_width()//2
+        dy = self.y - img.get_height()//2 + self.height
+        dy1 = self.y - img.get_height()//2
+        if X <= dx and X >= dx1:
+            if Y <= dy and Y >= dy1:
+                return True            
         return False
 
     def sell(self):
