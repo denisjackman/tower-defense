@@ -18,3 +18,5 @@ class Club(Enemy):
         self.max_health = 5
         self.health = self.max_health
         self.images = images[:]
+        self.name = 'club'
+        self.money = 5

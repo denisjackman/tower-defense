@@ -3,9 +3,16 @@ import os
 import math
 import pygame
 from .tower import Tower
+from menu.menu import Menu
 
 atltower_images = []
 atlarcher_images = []
+
+menu_background = pygame.image.load(os.path.join("game_assets/td-gui/PNG/upgrade","table.png"))
+menu_background = pygame.transform.scale(menu_background, (120, 70))
+
+upgrade_button = pygame.image.load(os.path.join("game_assets/td-gui/PNG/upgrade","ico_23.png"))
+upgrade_button = pygame.transform.scale(upgrade_button, (50, 50))
 
 for atx in range(3):
     add_str = str(atx + 6)
@@ -36,7 +43,12 @@ class ArcherTowerLong(Tower):
         self.original_damage = self.damage
         self.width = 64 
         self.height == 64
-        
+        self.menu = Menu(self, self.x, self.y, menu_background, [2000, 5000, 'MAX'])
+        self.menu.add_button(upgrade_button, "Upgrade")            
+    def get_upgrade_cost(self):
+        '''This function returns the upgrade cost.'''
+        return self.menu.get_item_cost()
+
     def draw(self, win):
         '''This function draws the tower.'''
         if self.selected:
@@ -59,6 +71,7 @@ class ArcherTowerLong(Tower):
     def attack(self, enemies):
         '''This function attacks the enemies.'''
         self.inRange = False
+        money = 0 
         enemy_closest =[]
         for enemy in enemies:
             enemy_x = enemy.x
@@ -73,6 +86,7 @@ class ArcherTowerLong(Tower):
             if self.archer_count == 6:
                if first_enemy.hit(self.damage):
                    enemies.remove(first_enemy)
+                   money = first_enemy.money
             if first_enemy.x > self.x and not self.left:
                 self.left = True
                 for x, img in enumerate(self.archer_images):
@@ -81,7 +95,7 @@ class ArcherTowerLong(Tower):
                 self.left = False
                 for x, img in enumerate(self.archer_images):
                     self.archer_images[x] = pygame.transform.flip(img, True, False)
-            
+        return money
     def change_range(self, range):
         '''This function gets the range.'''
         self.range = range
@@ -113,4 +127,5 @@ class ArcherTowerShort(ArcherTowerLong):
         self.damage = 2
         self.tower_images = atstower_images[:]
         self.archer_images = atsarcher_images[:]
-
+        self.menu = Menu(self, self.x, self.y, menu_background, [2500, 5500, 'MAX'])
+        self.menu.add_button(upgrade_button, "Upgrade")      

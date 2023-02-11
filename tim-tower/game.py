@@ -13,6 +13,9 @@ pygame.font.init()
 CAPTION = "Tim-Tower"
 ICON_FILE = 'y:/Resources/jackmanimation.png'
 BACKGROUND = "Y:/tower-defense/tim-tower/game_assets/td-tilesets1-2/tower-defense-game-tilesets/PNG/game_background_2/game_background_2.png"
+
+star = pygame.image.load(os.path.join("game_assets/td-gui/PNG/achievement","star.png"))
+star = pygame.transform.scale(star, (50, 50))
 class Game:
     '''This is the main game class.'''
     def __init__(self) -> None:
@@ -26,19 +29,21 @@ class Game:
                               ArcherTowerShort(231, 458),
                               ArcherTowerLong(493, 630),
                               ArcherTowerLong(696, 381),
-                              ArcherTowerLong(811, 159),
-                              ArcherTowerShort(900, 584),
-                              ArcherTowerShort(1044, 381),
+                              ArcherTowerLong(900, 584),
+                              ArcherTowerShort(539, 184),
+                              ArcherTowerShort(1085, 176),
                             ]                              
-        self.support_towers = [DamageTower(539, 184), 
-                               RangeTower(1085, 176)
+        self.support_towers = [DamageTower(811, 159), 
+                               #DamageTower(900, 584),
+                               #RangeTower(1085, 176),
+                               RangeTower(1044, 381),
                                ]
         self.lives = 10
-        self.money = 100
+        self.money = 2000
         self.timer = time.time()
         self.background = pygame.image.load(BACKGROUND)
         self.background = pygame.transform.scale(self.background, (self.width, self.height))
-        self.life_font = pygame.font.SysFont("comicsans", 70)
+        self.life_font = pygame.font.SysFont("comicsans", 65)
         self.selected_tower = None
     
     def run(self):
@@ -64,25 +69,37 @@ class Game:
                     self.enemies.append(Scorpion())
                     enemycheck = 0
 
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     run = False
+
+                position = pygame.mouse.get_pos()
+
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    position = pygame.mouse.get_pos()
+                    button_clicked = None
+                    if self.selected_tower:
+                        button_clicked = self.selected_tower.menu.get_clicked(position[0], position[1])
+                        if button_clicked:
+                            if button_clicked == "Upgrade":
+                                cost = self.selected_tower.get_upgrade_cost()
+                                if self.money >= cost:
+                                    self.money -= cost
+                                    self.selected_tower.upgrade()
+                    if not button_clicked:
+                        for tower in self.attack_towers:
+                            if tower.click(position[0], position[1]):
+                                tower.selected = True
+                                self.selected_tower = tower
+                            else:
+                                tower.selected = False
 
-                    for tower in self.attack_towers:
-                        if tower.click(position[0], position[1]):
-                            tower.selected = True
-                            self.selected_tower = tower
-                        else:
-                            tower.selected = False
-
-                    for tower in self.support_towers:
-                        if tower.click(position[0], position[1]):
-                            tower.selected = True
-                            self.selected_tower = tower
-                        else:
-                            tower.selected = False
+                        for tower in self.support_towers:
+                            if tower.click(position[0], position[1]):
+                                tower.selected = True
+                                self.selected_tower = tower
+                            else:
+                                tower.selected = False
 
             enemies_delete = []
             for enemy in self.enemies:
@@ -93,7 +110,7 @@ class Game:
                 self.lives -= 1
                 self.enemies.remove(enemy)
             for attack_tower in self.attack_towers:
-                attack_tower.attack(self.enemies)
+                self.money += attack_tower.attack(self.enemies)
 
             for support_tower in self.support_towers:
                 support_tower.support(self.attack_towers)
@@ -120,10 +137,16 @@ class Game:
         
         text = self.life_font.render(f"{self.lives}", 1, (255, 255, 255))
         life = LIVES_IMAGE
-        text = pygame.transform.scale(text, (50, 50))
         start_x = self.width - life.get_width()
-        self.win.blit(text, (start_x - text.get_width() - 10 , 10))
-        self.win.blit(LIVES_IMAGE, (start_x, 10))
+        self.win.blit(text, (start_x - text.get_width() - 10 , 5))
+        self.win.blit(LIVES_IMAGE, (start_x, 20))
+
+        text = self.life_font.render(f"{self.money}", 1, (255, 255, 255))
+        currency = star
+        start_x = self.width - currency.get_width()
+        self.win.blit(text, (start_x - text.get_width() - 10 , 55))
+        self.win.blit(currency, (start_x, 70))
+        
 
         pygame.display.update()
 

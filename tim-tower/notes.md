@@ -33,3 +33,5 @@ game_assets\td-gui\PNG\upgrade\window_3.png
 game_assets\td-gui\PNG\menu\button_play.png
 game_assets\td-gui\PNG\achievement\normal_window.png
 game_assets\td-gui\PNG\achievement\star.png
+# upgrade button tim-tower\game_assets\td-gui\PNG\upgrade\ico_23.png
+# menu background tim-tower\game_assets\td-gui\PNG\upgrade\window_3.png

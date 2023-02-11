@@ -1,5 +1,13 @@
 '''This is the tower class.'''
+import os
 import pygame
+from menu.menu import Menu
+
+menu_background = pygame.image.load(os.path.join("game_assets/td-gui/PNG/upgrade","table.png"))
+menu_background = pygame.transform.scale(menu_background, (120, 70))
+
+upgrade_button = pygame.image.load(os.path.join("game_assets/td-gui/PNG/upgrade","ico_23.png"))
+upgrade_button = pygame.transform.scale(upgrade_button, (50, 50))
 
 class Tower():
     '''This is the tower class.'''
@@ -12,14 +20,17 @@ class Tower():
         self.price = [0, 0, 0]
         self.level = 1
         self.selected = False
-        self.menu = None
         self.tower_images = []
         self.damage = 1
+        self.menu = Menu(self, self.x, self.y, menu_background, [2000, 'MAX'])
+        self.menu.add_button(upgrade_button, "Upgrade")        
     
     def draw(self, win):
         '''This function draws the tower.'''
         image = self.tower_images[self.level-1]
         win.blit(image, (self.x - image.get_width()//2, self.y - image.get_height()//2))
+        if self.selected:
+            self.menu.draw(win)
     
     def draw_radious(self, window):
         '''This function draws the range of the tower.'''
@@ -46,7 +57,7 @@ class Tower():
         img = self.tower_images[self.level - 1]
         dx =  self.x - img.get_width()//2 + self.width
         dx1 = self.x - img.get_width()//2
-        dy = self.y - img.get_height()//2 + self.height
+        dy = self.y + self.height - img.get_height()//2
         dy1 = self.y - img.get_height()//2
         if X <= dx and X >= dx1:
             if Y <= dy and Y >= dy1:
@@ -59,8 +70,9 @@ class Tower():
     
     def upgrade(self):
         '''This function upgrades the tower.'''
-        self.level += 1
-        self.damage += 1
+        if self.level < len(self.tower_images):
+            self.level += 1
+            self.damage += 1
     
     def get_upgrade_cost(self):
         '''This function gets the upgrade cost of the tower.'''
