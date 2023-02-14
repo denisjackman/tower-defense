@@ -8,14 +8,27 @@ from enemies.club import Club
 from enemies.wizard import Wizard
 from tower.archerTower import ArcherTowerLong, ArcherTowerShort
 from tower.supportTower import RangeTower, DamageTower
+from menu.menu import VerticalMenu
 pygame.font.init()
 
 CAPTION = "Tim-Tower"
 ICON_FILE = 'y:/Resources/jackmanimation.png'
 BACKGROUND = "Y:/tower-defense/tim-tower/game_assets/td-tilesets1-2/tower-defense-game-tilesets/PNG/game_background_2/game_background_2.png"
+side_image = pygame.image.load("game_assets/td-gui/PNG/upgrade/window_3.png")
+side_image = pygame.transform.scale(side_image, (120, 500))
 
 star = pygame.image.load(os.path.join("game_assets/td-gui/PNG/achievement","star.png"))
 star = pygame.transform.scale(star, (50, 50))
+
+buy_damage = pygame.image.load("game_assets/td-gui/PNG/upgrade/ico_2.png")# Damage Upgrade
+buy_range = pygame.image.load("game_assets/td-gui/PNG/upgrade/ico_3.png")# Range Upgrade
+buy_archer = pygame.image.load("game_assets/td-gui/PNG/upgrade/ico_7.png")# Purchase Archer Tower
+buy_archer_2 = pygame.image.load("game_assets/td-gui/PNG/upgrade/ico_8.png")# Purchase Crossbow Tower
+buy_damage = pygame.transform.scale(buy_damage, (75, 75))
+buy_range = pygame.transform.scale(buy_range, (75, 75))
+buy_archer = pygame.transform.scale(buy_archer, (75, 75))
+buy_archer_2 = pygame.transform.scale(buy_archer_2, (75, 75))
+
 class Game:
     '''This is the main game class.'''
     def __init__(self) -> None:
@@ -45,7 +58,12 @@ class Game:
         self.background = pygame.transform.scale(self.background, (self.width, self.height))
         self.life_font = pygame.font.SysFont("comicsans", 65)
         self.selected_tower = None
-    
+        self.menu = VerticalMenu(self.width -side_image.get_width() + 70, 250 , side_image)
+        self.menu.add_button(buy_archer, "Buy Archer", 500)
+        self.menu.add_button(buy_archer_2, "Buy Crossbow", 750)
+        self.menu.add_button(buy_damage, "Buy Damage", 1000)
+        self.menu.add_button(buy_range, "Buy Support", 1000)
+
     def run(self):
         '''This is the main game loop.'''
         run = True
@@ -134,7 +152,8 @@ class Game:
 
         for enemy in self.enemies:
             enemy.draw(self.win)
-        
+        self.menu.draw(self.win)
+ 
         text = self.life_font.render(f"{self.lives}", 1, (255, 255, 255))
         life = LIVES_IMAGE
         start_x = self.width - life.get_width()
