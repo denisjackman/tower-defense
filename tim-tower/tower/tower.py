@@ -82,5 +82,7 @@ class Tower():
         '''This function moves the tower.'''
         self.x = x
         self.y = y
-    
+        self.menu.x = x
+        self.menu.y = y
+        self.menu.update()
     

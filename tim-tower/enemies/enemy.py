@@ -44,9 +44,6 @@ class Enemy:
 
     def draw(self, win):
         '''This function draws the enemy.'''
-        self.animation_count += 1
-        if self.animation_count >= len(self.images) * 3:
-            self.animation_count = 0
 
         self.image = self.images[self.animation_count // 3]
         dx = self.x - (self.image.get_width() / 2)
@@ -55,7 +52,6 @@ class Enemy:
         self.draw_health_bar(win)
         #for path in self.path:
         #    pygame.draw.circle(win, (255, 0, 0), (path[0], path[1]), 5,1 )
-        self.move()
         
     def collide(self, collide_x, collide_y):
         '''This function checks if the enemy has collided with the tower.'''

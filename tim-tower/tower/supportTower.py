@@ -30,6 +30,7 @@ class RangeTower(Tower):
         self.effect = [0.2, 0.4]
         self.width = 64 
         self.height = 64
+        self.name = 'Range'
         
     def draw(self, window):
         ''' this draws the range tower '''
@@ -58,6 +59,7 @@ class DamageTower(RangeTower):
         self.effect = [1, 2]
         self.width = 64
         self.height = 64
+        self.name = 'Damage'
 
     def support(self, towers):
         ''' this function supports the tower '''

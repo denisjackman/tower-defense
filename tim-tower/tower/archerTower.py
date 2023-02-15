@@ -44,7 +44,9 @@ class ArcherTowerLong(Tower):
         self.width = 64 
         self.height == 64
         self.menu = Menu(self, self.x, self.y, menu_background, [2000, 5000, 'MAX'])
-        self.menu.add_button(upgrade_button, "Upgrade")            
+        self.menu.add_button(upgrade_button, "Upgrade")  
+        self.moving = False
+        self.name = "Archer"         
     def get_upgrade_cost(self):
         '''This function returns the upgrade cost.'''
         return self.menu.get_item_cost()
@@ -56,14 +58,14 @@ class ArcherTowerLong(Tower):
             pygame.draw.circle(circle_surface, (128, 128, 128, 100), (self.range, self.range), self.range)
             win.blit(circle_surface, (self.x - self.range, self.y - self.range))
         super().draw(win)
-        if self.inRange:
+        if self.inRange and not self.moving:
             self.archer_count += 1
-            if self.archer_count >= len(self.archer_images) * 10  :
+            if self.archer_count >= len(self.archer_images) * 5  :
                 self.archer_count = 0
         else:
             self.archer_count = 0
                         
-        archer = self.archer_images[self.archer_count // 10]
+        archer = self.archer_images[self.archer_count // 5]
         archerx = (self.x + self.width/2) - (archer.get_width()/2) - 32
         archery = (self.y) - (archer.get_height()/2) - 35
         win.blit(archer, (archerx, archery))
@@ -128,4 +130,5 @@ class ArcherTowerShort(ArcherTowerLong):
         self.tower_images = atstower_images[:]
         self.archer_images = atsarcher_images[:]
         self.menu = Menu(self, self.x, self.y, menu_background, [2500, 5500, 'MAX'])
-        self.menu.add_button(upgrade_button, "Upgrade")      
+        self.menu.add_button(upgrade_button, "Upgrade")
+        self.name="Crossbow"

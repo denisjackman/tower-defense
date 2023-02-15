@@ -7,9 +7,10 @@ star = pygame.transform.scale(star, (50, 50))
 star2 = pygame.transform.scale(star, (20, 20))
 
 class Button:
-    def __init__(self, x, y, image, name):
-        self.x = x
-        self.y = y
+    def __init__(self, menu, image, name):
+        self.menu = menu
+        self.x = menu.x - 50
+        self.y = menu.y - 90 
         self.image = image
         self.width = self.image.get_width()
         self.height = self.image.get_height()
@@ -25,11 +26,20 @@ class Button:
     def draw(self, win):
         '''This function draws the button.'''
         win.blit(self.image, (self.x, self.y))
-        
+
+    def update(self):
+        '''This function updates the button.'''
+        self.x = self.menu.x - 50 
+        self.y = self.menu.y - 90
 class VerticalButton(Button):
     '''This class represents a vertical button.'''
     def __init__(self, x, y, image, name, cost):
-        super().__init__(x, y, image, name)
+        self.x = x
+        self.y = y
+        self.image = image
+        self.width = self.image.get_width()
+        self.height = self.image.get_height()
+        self.name = name
         self.cost = cost
        
 class Menu:
@@ -53,7 +63,7 @@ class Menu:
         self.items += 1
         button_x = self.x - self.background.get_width()/2 + 10
         button_y = self.y - 100 + 10 
-        button = Button(button_x, button_y, image, name)
+        button = Button(self, image, name)
         self.buttons.append(button)
         self.item_names.append(name)
     def get_item_cost(self):
@@ -86,6 +96,11 @@ class Menu:
         
         return None
     
+    def update (self):
+        '''This function updates the menu.'''
+        for item in self.buttons:
+            item.update()
+
 class VerticalMenu(Menu):
     '''This class represents the vertical menu.'''
     def __init__(self, x, y, image):
@@ -104,14 +119,17 @@ class VerticalMenu(Menu):
         '''This function adds a button to the menu.'''
         self.items += 1
         button_x = self.x - 40
-        button_y = (self.y - 100  + (self.items -1) * 120)
+        button_y = (self.y - 90  + (self.items -1) * 120)
         button = VerticalButton(button_x, button_y, image, name, cost)
         self.buttons.append(button)
         self.item_names.append(name)
         
-
-    def get_item_cost(self):
-        return Exception("Vertical menu does not have item cost")
+    def get_item_cost(self, name):
+        '''This function returns the cost of the item.'''
+        for item in self.buttons:
+            if item.name == name:
+                return item.cost
+        return Exception(f"{name} does not have item cost")
     
     def draw(self, win):
         '''This function draws the menu.'''
@@ -123,3 +141,20 @@ class VerticalMenu(Menu):
             win.blit(star2, (item.x, item.y + item.height))
             text = self.font.render(f"{item.cost}", 1, (255, 255, 255))
             win.blit(text, (item.x +item.width/2 - text.get_width()/2 + 5, item.y + item.height + 2))
+            
+class PlayPauseButton(Button):
+    def __init__(self, play_image, pause_image, x, y):
+        self.x = x
+        self.y = y
+        self.play = play_image
+        self.image = play_image
+        self.pause = pause_image
+        self.width = self.image.get_width()
+        self.height = self.image.get_height()
+        self.paused = True
+        
+    def draw(self, window):
+        if self.paused: 
+            window.blit(self.play, (self.x, self.y))
+        else:
+            window.blit(self.pause, (self.x, self.y))
