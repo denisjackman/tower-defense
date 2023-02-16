@@ -88,7 +88,7 @@ class ArcherTowerLong(Tower):
             if self.archer_count == 6:
                if first_enemy.hit(self.damage):
                    enemies.remove(first_enemy)
-                   money = first_enemy.money
+                   money = first_enemy.money * 2
             if first_enemy.x > self.x and not self.left:
                 self.left = True
                 for x, img in enumerate(self.archer_images):
